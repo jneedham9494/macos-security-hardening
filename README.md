@@ -1,24 +1,48 @@
 # 🛡️ macOS Security Hardening
 
-Comprehensive security and privacy hardening toolkit for macOS development environments.
+Core macOS security and privacy hardening toolkit for development environments.
 
 ![macOS](https://img.shields.io/badge/macOS-12%2B-blue.svg)
 ![Security](https://img.shields.io/badge/Security-Enterprise%20Grade-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## 📁 Project Organization
+
+This repository focuses on **core macOS security hardening**. For specialized security domains, see:
+
+- **[Digital Privacy Management](../digital-privacy-management/)** - Complete digital identity management and privacy
+- **[Travel Security Toolkit](../travel-security-toolkit/)** - International travel security and OPSEC
+
 ## 🚀 Quick Start
 
 ```bash
 # Clone the repository
-git clone https://github.com/jneedham9494/macos-security-hardening.git
+git clone https://github.com/user/macos-security-hardening.git
 cd macos-security-hardening
 
-# Make executable and run
-chmod +x security-setup.sh
-./security-setup.sh
-
-# For full security hardening, choose option 9
+# Run the complete security hardening setup
+chmod +x security-setup-consolidated.sh
+./security-setup-consolidated.sh
 ```
+
+The consolidated script provides an interactive menu with all security features:
+- 🚀 Complete Security Setup (Recommended)
+- 📦 Install Security Tools
+- 🔑 Setup SSH Keys  
+- 🔒 Configure Git Security
+- 🔥 Setup Firewall
+- 🛡️ Harden System Security
+- ⚙️ Create Security Tool Configs
+- 📊 Setup Security Monitoring
+- 🐚 Configure Shell Integration
+
+**After setup, you'll have access to these commands:**
+
+- `security secrets` - Scan for secrets
+- `security vulns` - Vulnerability scan  
+- `security monitor` - Full security monitoring
+- `security logs` - View security logs
+- `security-scheduler` - Manage automated periodic scans
 
 ## 🎯 What This Does
 
@@ -86,14 +110,15 @@ Transform your macOS development machine into an **enterprise-grade secure envir
 
 ```
 macos-security-hardening/
-├── README.md                    # This file
-├── security-setup.sh           # Main security hardening script (574 lines)
-├── SECURITY-SETUP-README.md    # Comprehensive documentation
+├── README.md                         # This file
+├── security-setup.sh                # Main security hardening script (574 lines)
+├── setup-security-configs.sh        # Security tools configuration setup
+├── SECURITY-SETUP-README.md         # Comprehensive documentation
 ├── docs/
-│   ├── COMPLETE-SESSION-LOG.md # Session history and achievements
-│   ├── CONVERSATION-LOG.md     # Technical conversation log
-│   └── SETUP-COMPLETE.txt      # Quick completion reference
-└── examples/                   # (to be added)
+│   ├── COMPLETE-SESSION-LOG.md      # Session history and achievements
+│   ├── CONVERSATION-LOG.md          # Technical conversation log
+│   └── SETUP-COMPLETE.txt           # Quick completion reference
+└── examples/                        # (to be added)
     ├── ssh-config-sample
     ├── gpg-config-sample
     └── monitoring-scripts/
@@ -175,19 +200,14 @@ diskutil apfs list | grep FileVault  # Check encryption
 ## 🔄 Integration
 
 ### Works Great With:
-- **[dotfolderconfig](https://github.com/jneedham9494/dotfolderconfig)** - Complete development environment setup
 - **Homebrew** - Package management
 - **VPN solutions** - Mullvad, NordVPN, etc.
 - **Development workflows** - Git, VS Code, terminal environments
 
 ### Integration Example:
 ```bash
-# Set up development environment first
-git clone https://github.com/jneedham9494/dotfolderconfig.git
-cd dotfolderconfig && ./scripts/ultimate-setup.sh
-
-# Then add enterprise-grade security
-cd .. && git clone https://github.com/jneedham9494/macos-security-hardening.git
+# Set up enterprise-grade security
+git clone https://github.com/user/macos-security-hardening.git
 cd macos-security-hardening && ./security-setup.sh
 ```
 

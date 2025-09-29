@@ -1,0 +1,54 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+config-setup.log
+security-setup.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Archives (may contain sensitive data)
+archive/
+
+# Backup files
+*.bak
+*.backup
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+.*.sublime-workspace
+
+# System files
+*.pid
+*.seed
+*.pid.lock
+
+# Security-sensitive files (be careful with these)
+ssh_keys/
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Cache directories
+.cache/
+cache/
