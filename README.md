@@ -110,18 +110,15 @@ Transform your macOS development machine into an **enterprise-grade secure envir
 
 ```
 macos-security-hardening/
-├── README.md                         # This file
-├── security-setup.sh                # Main security hardening script (574 lines)
-├── setup-security-configs.sh        # Security tools configuration setup
-├── SECURITY-SETUP-README.md         # Comprehensive documentation
-├── docs/
-│   ├── COMPLETE-SESSION-LOG.md      # Session history and achievements
-│   ├── CONVERSATION-LOG.md          # Technical conversation log
-│   └── SETUP-COMPLETE.txt           # Quick completion reference
-└── examples/                        # (to be added)
-    ├── ssh-config-sample
-    ├── gpg-config-sample
-    └── monitoring-scripts/
+├── README.md                            # This file  
+├── security-setup-consolidated.sh       # Main security hardening script (970 lines)
+├── SECURITY-SETUP-README.md            # Comprehensive documentation
+├── CLEANUP-SUMMARY.md                  # Project cleanup summary
+├── PERIODIC-MONITORING-COMPLETE.md     # Monitoring setup guide
+├── .gitignore                          # Git ignore rules
+└── docs/
+    ├── SETUP-COMPLETE.txt              # Quick completion reference
+    └── SETUP-COMPLETE-CLEAN.txt        # Clean setup verification
 ```
 
 ## 🎛️ Interactive Menu
@@ -150,22 +147,25 @@ Enter your choice [0-9]:
 ## ⚙️ Installation Options
 
 ### 🎯 **Recommended: Complete Setup**
+
 ```bash
-./security-setup.sh
-# Choose option 9 for complete hardening
+./security-setup-consolidated.sh
+# Choose option 1 for complete hardening
 ```
 
-### 🔧 **Custom Setup**  
+### 🔧 **Custom Setup**
+
 ```bash
-./security-setup.sh
-# Choose individual components (1-8) as needed
+./security-setup-consolidated.sh
+# Choose individual components (2-9) as needed
 ```
 
 ### 🧪 **Development/Testing**
+
 ```bash
 # Set custom email for keys
 export USER_EMAIL="your-email@example.com"
-./security-setup.sh
+./security-setup-consolidated.sh
 ```
 
 ## 📚 Documentation
@@ -204,11 +204,12 @@ diskutil apfs list | grep FileVault  # Check encryption
 - **VPN solutions** - Mullvad, NordVPN, etc.
 - **Development workflows** - Git, VS Code, terminal environments
 
-### Integration Example:
+### Integration Example
+
 ```bash
 # Set up enterprise-grade security
 git clone https://github.com/user/macos-security-hardening.git
-cd macos-security-hardening && ./security-setup.sh
+cd macos-security-hardening && ./security-setup-consolidated.sh
 ```
 
 ## 🛠️ Troubleshooting
