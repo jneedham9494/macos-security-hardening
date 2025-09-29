@@ -173,69 +173,35 @@ EOF
 # ============================================================================
 
 setup_git_security() {
-    print_header "Git Security & Commit Signing"
+    print_header "Git Security & SSH Commit Signing"
     
-    # Install GPG
-    if ! command -v gpg &> /dev/null; then
-        print_info "Installing GPG..."
-        brew install gnupg pinentry-mac
+    print_info "Configuring SSH-based commit signing..."
+    
+    # Check if SSH keys exist
+    local ssh_key_path="$HOME/.ssh/id_ed25519.pub"
+    if [[ ! -f "$ssh_key_path" ]]; then
+        print_warning "Ed25519 SSH key not found. Please run SSH security setup first."
+        return 1
     fi
     
-    # Configure GPG
-    local gpg_dir="$HOME/.gnupg"
-    mkdir -p "$gpg_dir"
-    chmod 700 "$gpg_dir"
+    # Configure Git for SSH signing (modern alternative to GPG)
+    git config --global gpg.format ssh
+    git config --global user.signingkey "$ssh_key_path"
+    git config --global commit.gpgsign true
+    git config --global tag.gpgsign true
     
-    # Create GPG config
-    cat > "$gpg_dir/gpg.conf" << 'EOF'
-# GPG Configuration for Enhanced Security
-use-agent
-charset utf-8
-no-greeting
-no-permission-warning
-lock-never
-keyid-format 0xlong
-with-fingerprint
-list-options show-uid-validity
-verify-options show-uid-validity
-personal-cipher-preferences AES256 AES192 AES
-personal-digest-preferences SHA512 SHA384 SHA256
-personal-compress-preferences ZLIB BZIP2 ZIP Uncompressed
-default-preference-list SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed
-cert-digest-algo SHA512
-s2k-digest-algo SHA512
-s2k-cipher-algo AES256
-throw-keyids
-EOF
-
-    cat > "$gpg_dir/gpg-agent.conf" << 'EOF'
-# GPG Agent Configuration
-pinentry-program /opt/homebrew/bin/pinentry-mac
-default-cache-ttl 600
-max-cache-ttl 7200
-enable-ssh-support
-EOF
-
-    chmod 600 "$gpg_dir"/{gpg.conf,gpg-agent.conf} 2>/dev/null || true
+    print_success "SSH commit signing configured with Ed25519 key"
     
-    # Generate GPG key if it doesn't exist
-    if ! gpg --list-secret-keys --keyid-format LONG | grep -q sec; then
-        print_info "Setting up GPG key for commit signing..."
-        print_warning "GPG key generation requires manual input. Please follow the prompts."
-        gpg --full-generate-key
-        print_success "GPG key generated"
+    # Configure Git user info if not set
+    if [[ -z "$(git config --global user.email)" ]]; then
+        git config --global user.email "$USER_EMAIL"
+        print_info "Git email configured: $USER_EMAIL"
     fi
     
-    # Configure Git for signing
-    local signing_key=$(gpg --list-secret-keys --keyid-format LONG | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2 2>/dev/null || echo "")
-    if [[ -n "$signing_key" ]]; then
-        git config --global user.signingkey "$signing_key"
-        git config --global commit.gpgsign true
-        git config --global tag.gpgsign true
-        git config --global gpg.program gpg
-        print_success "Git commit signing configured with key: $signing_key"
-    else
-        print_warning "No GPG key found. Commit signing not configured."
+    if [[ -z "$(git config --global user.name)" ]]; then
+        local git_name="$(whoami)"
+        git config --global user.name "$git_name"
+        print_info "Git name configured: $git_name"
     fi
     
     # Additional Git security settings
@@ -248,7 +214,14 @@ EOF
     git config --global fetch.fsckobjects true
     git config --global receive.fsckObjects true
     
+    # Set up allowed signers file for SSH verification
+    local allowed_signers="$HOME/.config/git/allowed_signers"
+    mkdir -p "$(dirname "$allowed_signers")"
+    echo "$USER_EMAIL $(cat "$ssh_key_path")" > "$allowed_signers"
+    git config --global gpg.ssh.allowedSignersFile "$allowed_signers"
+    
     print_success "Git security configuration completed"
+    print_info "Your commits will now be signed with SSH keys - much simpler than GPG!"
 }
 
 # ============================================================================
