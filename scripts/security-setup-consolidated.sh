@@ -115,7 +115,6 @@ install_security_tools() {
         "hashcat"        # Password cracking
         "john"           # Password cracking
         "metasploit"     # Penetration testing framework
-        "nmap"           # Network discovery
         "wireshark"      # Network protocol analyzer
         "burp-suite"     # Web security testing
         "trivy"          # Vulnerability scanner
@@ -216,7 +215,6 @@ install_security_tools() {
         "suspicious-package" # Package inspection
         "apparency"         # App inspection
         "app-cleaner"       # Application removal
-        "cleanmaster- mac"  # System cleaning
         "malwarebytes"      # Anti-malware
         "objective-see"     # Security tools suite
     )
@@ -244,18 +242,20 @@ setup_ssh_keys() {
     # Generate Ed25519 key (modern, secure)
     if [[ ! -f "$ssh_dir/id_ed25519" ]]; then
         print_info "Generating Ed25519 SSH key..."
-        ssh-keygen -t ed25519 -C "$SSH_KEY_COMMENT" -f "$ssh_dir/id_ed25519" -N ""
+        print_info "⚠️  IMPORTANT: Use a strong passphrase to protect your private key!"
+        ssh-keygen -t ed25519 -C "$SSH_KEY_COMMENT" -f "$ssh_dir/id_ed25519"
         chmod 600 "$ssh_dir/id_ed25519"
         chmod 644 "$ssh_dir/id_ed25519.pub"
         print_success "Ed25519 SSH key generated"
     else
         print_info "Ed25519 SSH key already exists"
     fi
-    
+
     # Generate RSA-4096 key (compatibility)
     if [[ ! -f "$ssh_dir/id_rsa" ]]; then
         print_info "Generating RSA-4096 SSH key for compatibility..."
-        ssh-keygen -t rsa -b 4096 -C "$SSH_KEY_COMMENT" -f "$ssh_dir/id_rsa" -N ""
+        print_info "⚠️  IMPORTANT: Use a strong passphrase to protect your private key!"
+        ssh-keygen -t rsa -b 4096 -C "$SSH_KEY_COMMENT" -f "$ssh_dir/id_rsa"
         chmod 600 "$ssh_dir/id_rsa"
         chmod 644 "$ssh_dir/id_rsa.pub"
         print_success "RSA-4096 SSH key generated"
@@ -306,9 +306,12 @@ EOF
 
 setup_git_security() {
     print_header "🔒 Configuring Git Security"
-    
+
+    # Get user name from environment or prompt
+    local git_user_name="${GIT_USER_NAME:-$(whoami)}"
+
     # Set secure Git configuration
-    git config --global user.name "Dev User"
+    git config --global user.name "$git_user_name"
     git config --global user.email "$USER_EMAIL"
     git config --global init.defaultBranch main
     git config --global pull.rebase true
@@ -324,9 +327,9 @@ setup_git_security() {
     git config --global url."https://github.com/".insteadOf "git@github.com:"
     git config --global url."https://".insteadOf "git://"
     
-    # Signing configuration
-    git config --global commit.gpgsign false  # Disable for now, can be enabled later
-    git config --global tag.gpgsign false
+    # Signing configuration - enable GPG/SSH signing for commit integrity
+    git config --global commit.gpgsign true
+    git config --global tag.gpgsign true
     
     # Create global gitignore
     cat > ~/.gitignore_global << 'EOF'
@@ -385,11 +388,11 @@ setup_firewall() {
     
     # Enable macOS Application Firewall
     sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
-    sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setloggingmode on
     sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
-    sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsigned off
-    sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsignedapp off
-    
+
+    # Note: --setallowsigned and --setallowsignedapp left at defaults
+    # Blocking signed apps can break critical system functionality
+
     print_success "macOS Application Firewall configured and enabled"
     
     # Install and configure LuLu firewall if available
@@ -684,7 +687,7 @@ EOF
     local plist_dir="$HOME/Library/LaunchAgents"
     mkdir -p "$plist_dir"
     
-    cat > "$plist_dir/com.security.monitoring.plist" << 'EOF'
+    cat > "$plist_dir/com.security.monitoring.plist" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
