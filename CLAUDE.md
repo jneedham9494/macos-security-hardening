@@ -114,7 +114,24 @@ chmod +x scripts/*.sh
 USER_EMAIL="custom@example.com" ./scripts/security-setup-consolidated.sh
 ```
 
-### Testing Components
+### Running Tests
+```bash
+# Install bats-core (Bash Automated Testing System)
+brew install bats-core
+
+# Run all tests
+bats tests/
+
+# Run specific test file
+bats tests/ssh_security.bats
+bats tests/git_security.bats
+bats tests/utilities.bats
+
+# Run with verbose output
+bats --verbose-run tests/
+```
+
+### Manual Testing
 ```bash
 # Test SSH setup
 ls -la ~/.ssh/
@@ -154,6 +171,12 @@ macos-security-hardening/
 │   ├── email-password-security.sh       # Email/password security (15KB)
 │   ├── shell-integration.sh             # Shell aliases/functions (3KB)
 │   └── travel-security-prep.sh          # Travel preparation (15KB)
+├── tests/                               # Automated tests (bats-core)
+│   ├── ssh_security.bats                # SSH security tests
+│   ├── git_security.bats                # Git security tests
+│   ├── utilities.bats                   # Utility function tests
+│   └── helpers/
+│       └── test_helper.bash             # Test helper functions
 ├── docs/                                # All documentation
 │   ├── SECURITY-SETUP-README.md         # Comprehensive setup guide
 │   ├── GITHUB-SETUP.md                  # Repository setup instructions

@@ -3,7 +3,9 @@
     "allow": [
       "Bash(xargs:*)",
       "Bash(git check-ignore:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(command -v:*)",
+      "Bash(bats:*)"
     ],
     "deny": [],
     "ask": []
