@@ -5,7 +5,9 @@
       "Bash(git check-ignore:*)",
       "Bash(git add:*)",
       "Bash(command -v:*)",
-      "Bash(bats:*)"
+      "Bash(bats:*)",
+      "Bash(git -C /Users/jackdev/development/macos-security-hardening log --oneline)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

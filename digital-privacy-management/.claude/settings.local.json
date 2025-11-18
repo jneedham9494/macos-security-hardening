@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(for dir in 04 05 08 09)",
+      "Bash(do echo \"=== Project $dir ===\")",
+      "Bash(done)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
